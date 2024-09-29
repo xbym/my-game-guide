@@ -6,9 +6,18 @@
 
 - `README.md`：项目的基本介绍和使用说明。
 - `package.json`：项目的依赖管理和脚本配置文件。
+- `package-lock.json`：记录项目依赖的确切版本，确保一致的依赖安装。
 - `tsconfig.json`：TypeScript 配置文件。
 - `.env.local`：环境变量配置文件，包含 MongoDB 连接字符串等敏感信息。
+- `.eslintrc.json`：ESLint 配置文件，用于代码质量和风格检查。
+- `.gitignore`：Git 忽略文件，指定哪些文件和文件夹不应提交到版本控制。
+- `next.config.mjs`：Next.js 配置文件。
+- `postcss.config.mjs`：PostCSS 配置文件，用于处理 CSS。
+- `tailwind.config.ts`：Tailwind CSS 配置文件。
 - `docs/`：文档文件夹，包含项目的开发指南、长久计划、命令指南等文档。
+- `app/`：应用文件夹，包含全局布局和样式文件。
+- `lib/`：库文件夹，包含数据库连接文件。
+- `pages/`：页面文件夹，包含 Next.js 页面文件。
 
 ## `docs/` 文件夹
 
@@ -26,10 +35,6 @@
 ## `lib/` 文件夹
 
 - `mongodb.ts`：数据库连接文件，负责与 MongoDB 建立连接。
-
-## `pages/api/` 文件夹
-
-- `checkin.ts`：打卡功能的 API 端点，处理用户的打卡请求。
 
 ## `app/` 文件夹
 

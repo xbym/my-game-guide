@@ -20,11 +20,6 @@
 - 创建首页 `pages/index.tsx`
 - 创建攻略详情页 `pages/guides/[id].tsx`
 
-## 添加打卡功能
-
-- 在 `pages/api` 文件夹中创建 `checkin.ts`
-- 在首页添加打卡按钮
-
 ## 测试与部署
 
 - 本地测试
