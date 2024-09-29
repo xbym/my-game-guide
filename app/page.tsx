@@ -5,12 +5,13 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import Link from 'next/link'
 import { Search, Menu, User } from 'lucide-react'
+import Image from 'next/image';
 
 const latestGuides = [
-  { id: 1, title: "Elden Ring: Malenia攻略", game: "Elden Ring", image: "/placeholder.svg?height=400&width=600" },
-  { id: 2, title: "塞尔达传说：神庙全攻略", game: "塞尔达传说：王国之泪", image: "/placeholder.svg?height=400&width=600" },
-  { id: 3, title: "赛博朋克2077：武器搭配", game: "赛博朋克2077", image: "/placeholder.svg?height=400&width=600" },
-  { id: 4, title: "博德之门3：法师构建", game: "博德之门3", image: "/placeholder.svg?height=400&width=600" },
+  { id: 1, title: "Elden Ring: Malenia攻略", game: "Elden Ring", image: "/images/placeholder.jpg" },
+  { id: 2, title: "塞尔达传说：神庙全攻略", game: "塞尔达传说：王国之泪", image: "/images/placeholder.jpg" },
+  { id: 3, title: "赛博朋克2077：武器搭配", game: "赛博朋克2077", image: "/images/placeholder.jpg" },
+  { id: 4, title: "博德之门3：法师构建", game: "博德之门3", image: "/images/placeholder.jpg" },
 ]
 
 const gameCategories = [
@@ -102,7 +103,13 @@ export default function HomePage() {
               {latestGuides.map((guide) => (
                 <div key={guide.id} className="group">
                   <div className="aspect-w-16 aspect-h-9 mb-4 overflow-hidden rounded-lg">
-                    <img src={guide.image} alt={guide.title} className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-105" />
+                    <Image
+                      src={guide.image}
+                      alt={guide.title}
+                      width={500}
+                      height={300}
+                      layout="responsive"
+                    />
                   </div>
                   <h3 className="font-semibold mb-1 group-hover:text-purple-400 transition-colors">{guide.title}</h3>
                   <p className="text-sm text-gray-400">{guide.game}</p>
