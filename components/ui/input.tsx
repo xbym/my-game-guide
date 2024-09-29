@@ -2,11 +2,11 @@ import * as React from "react"
 
 import { cn } from "@/lib/utils"
 
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  // 如果需要,可以在这里添加自定义属性
-}
+// 删除空接口声明
+// interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {}
 
-const Input = React.forwardRef<HTMLInputElement, InputProps>(
+// 直接使用 React.InputHTMLAttributes<HTMLInputElement> 作为类型
+const Input = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement>>(
   ({ className, type, ...props }, ref) => {
     return (
       <input
