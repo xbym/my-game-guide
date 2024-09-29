@@ -10,174 +10,80 @@
 - 数据库：MongoDB
 - 编程语言：TypeScript
 - 页面文件：TSX
+- 样式：Tailwind CSS
 
 ## 开发步骤
 
 ### 第一步：项目初始化
 
-- [x] **创建 Next.js 项目**
-    ```bash
-    npx create-next-app@latest my-game-guide --typescript
-    cd my-game-guide
-    ```
-
-- [x] **安装 MongoDB 客户端**
-    ```bash
-    npm install mongodb
-    ```
-
-- [x] **创建 `docs` 文件夹**
-    ```bash
-    mkdir docs
-    ```
-
-- [x] **在 `docs` 文件夹中创建 `MVP_Development_Guide.md` 文件**
-    ```bash
-    touch docs/MVP_Development_Guide.md
-    ```
+- [x] 创建 Next.js 项目并安装必要的依赖。
+- [x] 配置 TypeScript 和 ESLint。
+- [x] 初始化 Git 仓库并创建基本的文件结构。
+- [ ] 安装和配置 Tailwind CSS。
 
 ### 第二步：配置 MongoDB
 
-- [x] **在项目根目录创建 `.env.local` 文件**
-    ```bash
-    touch .env.local
-    ```
-
-- [x] **在 `.env.local` 文件中添加 MongoDB 连接字符串**
-    ```env
-    MONGODB_URI=mongodb+srv://<username>:<password>@cluster0.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
-    ```
-
-- [x] **创建数据库连接文件 `lib/mongodb.ts`**
-    ```typescript:lib/mongodb.ts
-    import { MongoClient } from 'mongodb';
-
-    const uri = process.env.MONGODB_URI as string;
-    let client: MongoClient;
-    let clientPromise: Promise<MongoClient>;
-
-    declare global {
-        // eslint-disable-next-line no-var
-        var _mongoClientPromise: Promise<MongoClient>;
-    }
-
-    if (!process.env.MONGODB_URI) {
-        throw new Error('Please add your Mongo URI to .env.local');
-    }
-
-    if (process.env.NODE_ENV === 'development') {
-        if (!global._mongoClientPromise) {
-            client = new MongoClient(uri);
-            global._mongoClientPromise = client.connect();
-        }
-        clientPromise = global._mongoClientPromise;
-    } else {
-        client = new MongoClient(uri);
-        clientPromise = client.connect();
-    }
-
-    export default clientPromise;
-    ```
+- [x] 创建 MongoDB Atlas 集群并获取连接字符串。
+- [x] 在项目中配置环境变量以存储 MongoDB 连接字符串。
+- [x] 创建数据库连接文件，确保可以在项目中与 MongoDB 进行交互。
+- [ ] 设计并创建初始的数据库模式（Schema）。
 
 ### 第三步：创建基本页面
 
-- [x] **创建首页 `pages/index.tsx`**
-    ```typescript:pages/index.tsx
-    import { GetServerSideProps } from 'next';
-    import clientPromise from '../lib/mongodb';
+- [x] 创建首页，展示游戏攻略列表。
+- [x] 创建攻略详情页，展示单个攻略的详细信息。
+- [x] 使用 Next.js 的 `getServerSideProps` 方法从 MongoDB 获取数据并在页面中展示。
+- [ ] 创建导航组件，实现页面间的跳转。
+- [ ] 实现响应式设计，确保在不同设备上的良好显示。
 
-    interface Guide {
-        _id: string;
-        title: string;
-    }
+### 第四步：用户认证
 
-    interface HomeProps {
-        guides: Guide[];
-    }
+- [ ] 实现用户注册功能。
+- [ ] 实现用户登录功能。
+- [ ] 创建用户个人资料页面。
+- [ ] 实现基本的权限控制，区分普通用户和管理员。
 
-    export default function Home({ guides }: HomeProps) {
-        return (
-            <div>
-                <h1>游戏攻略平台</h1>
-                <ul>
-                    {guides.map((guide) => (
-                        <li key={guide._id}>{guide.title}</li>
-                    ))}
-                </ul>
-            </div>
-        );
-    }
+### 第五步：攻略管理
 
-    export const getServerSideProps: GetServerSideProps = async () => {
-        const client = await clientPromise;
-        const db = client.db('game-guides');
-        const guides = await db.collection('guides').find({}).toArray();
+- [ ] 创建攻略编辑页面，允许用户创建和编辑攻略。
+- [ ] 实现攻略分类和标签系统。
+- [ ] 添加攻略搜索功能。
+- [ ] 实现攻略评分和评论功能。
 
-        return {
-            props: {
-                guides: JSON.parse(JSON.stringify(guides)),
-            },
-        };
-    };
-    ```
+### 第六步：多语言支持
 
-- [x] **创建攻略详情页 `pages/guides/[id].tsx`**
-    ```typescript:pages/guides/[id].tsx
-    import { GetServerSideProps } from 'next';
-    import clientPromise from '../../lib/mongodb';
-    import { ObjectId } from 'mongodb';
-    import { ParsedUrlQuery } from 'querystring';
+- [ ] 实现基本的多语言切换功能。
+- [ ] 为主要内容提供中英文翻译。
+- [ ] 创建语言切换组件。
 
-    interface Guide {
-        _id: string;
-        title: string;
-        content: string;
-    }
+### 第七步：测试与部署
 
-    interface GuideProps {
-        guide: Guide;
-    }
+- [x] 在本地环境中测试所有功能，确保页面和数据交互正常。
+- [x] 部署项目到 Vercel，并配置环境变量以确保 MongoDB 连接正常。
+- [x] 确保部署后的项目在生产环境中运行良好。
+- [ ] 实现自动化测试，包括单元测试和集成测试。
 
-    interface Params extends ParsedUrlQuery {
-        id: string;
-    }
+### 第八步：性能优化
 
-    export default function Guide({ guide }: GuideProps) {
-        return (
-            <div>
-                <h1>{guide.title}</h1>
-                <p>{guide.content}</p>
-            </div>
-        );
-    }
+- [ ] 实现图片懒加载。
+- [ ] 优化首页加载速度。
+- [ ] 实现服务端渲染（SSR）和静态站点生成（SSG）。
+- [ ] 使用 Next.js 的 API 路由优化数据获取。
 
-    export const getServerSideProps: GetServerSideProps = async (context) => {
-        const { id } = context.params as Params;
-        const client = await clientPromise;
-        const db = client.db('game-guides');
-        const guide = await db.collection('guides').findOne({ _id: new ObjectId(id) });
+### 第九步：SEO 优化
 
-        return {
-            props: {
-                guide: JSON.parse(JSON.stringify(guide)),
-            },
-        };
-    };
-    ```
+- [ ] 优化 SEO，提升搜索引擎排名。
+- [ ] 实现动态 meta 标签。
+- [ ] 优化 URL 结构。
+- [ ] 创建站点地图。
 
-### 第四步：测试与部署
+### 第十步：用户体验提升
 
-- [ ] **本地测试**
-    ```bash
-    npm run dev
-    ```
-
-- [ ] **部署到 Vercel**
-    - 登录 [Vercel](https://vercel.com/)
-    - 新建项目并选择 GitHub 仓库
-    - 配置环境变量 `MONGODB_URI`
-    - 部署项目
+- [ ] 添加加载状态和错误处理。
+- [ ] 实现无限滚动或分页功能。
+- [ ] 添加动画效果以提升交互体验。
+- [ ] 实现深色模式。
 
 ## 结语
 
-通过以上步骤，您将完成一个基本的游戏攻略平台的 MVP 版本。希望这个指南能帮助您顺利启动项目，祝您开发顺利！
+通过以上步骤，您将完成一个功能更加丰富的游戏攻略平台的 MVP 版本。这个扩展版的开发指南涵盖了更多的功能和优化点，可以帮助您构建一个更加完善的产品。根据实际开发进度和资源情况，您可以灵活调整这些步骤的优先级。祝您开发顺利！
