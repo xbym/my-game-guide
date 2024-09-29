@@ -19,7 +19,7 @@
 - [x] 创建 Next.js 项目并安装必要的依赖。
 - [x] 配置 TypeScript 和 ESLint。
 - [x] 初始化 Git 仓库并创建基本的文件结构。
-- [ ] 安装和配置 Tailwind CSS。
+- [x] 安装和配置 Tailwind CSS。
 
 ### 第二步：配置 MongoDB
 
