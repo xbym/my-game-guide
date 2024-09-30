@@ -14,32 +14,38 @@ interface CachedConnection {
 }
 
 declare global {
+  // eslint-disable-next-line no-var
   var mongooseConnection: CachedConnection | undefined;
 }
 
-let cached = global as any;
+// 使用更具体的类型而不是 any
+const cached: { mongooseConnection: CachedConnection } = global as unknown as { mongooseConnection: CachedConnection };
 
-if (!cached.mongoose) {
-  cached.mongoose = { conn: null, promise: null };
+if (!cached.mongooseConnection) {
+  cached.mongooseConnection = { conn: null, promise: null };
 }
 
 async function dbConnect(): Promise<typeof mongoose> {
-  if (cached.mongoose.conn) {
-    return cached.mongoose.conn;
+  if (cached.mongooseConnection.conn) {
+    return cached.mongooseConnection.conn;
   }
 
-  if (!cached.mongoose.promise) {
+  if (!cached.mongooseConnection.promise) {
     const opts = {
       bufferCommands: false,
     };
 
-    cached.mongoose.promise = mongoose.connect(MONGODB_URI!, opts).then((mongooseInstance) => {
+    cached.mongooseConnection.promise = mongoose.connect(MONGODB_URI!, opts).then((mongooseInstance) => {
+      cached.mongooseConnection.conn = mongooseInstance;
       return mongooseInstance;
     });
   }
 
   try {
-    const mongooseInstance = await cached.mongoose.promise;
+    const mongooseInstance = await cached.mongooseConnection.promise;
+    if (!mongooseInstance) {
+      throw new Error('Failed to connect to MongoDB');
+    }
     return mongooseInstance;
   } catch (error) {
     console.error('Failed to connect to MongoDB:', error);
