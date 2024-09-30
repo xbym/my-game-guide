@@ -1,3 +1,10 @@
-module.exports = {
-  // 如果没有其他配置，可以保持为空对象
-}
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  reactStrictMode: true,
+  webpack: (config) => {
+    config.experiments = { ...config.experiments, topLevelAwait: true };
+    return config;
+  },
+};
+
+module.exports = nextConfig;

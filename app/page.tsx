@@ -1,11 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import Link from 'next/link'
 import { Search, Menu, User } from 'lucide-react'
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 const latestGuides = [
   { id: 1, title: "Elden Ring: Malenia攻略", game: "Elden Ring", image: "/images/placeholder.jpg" },
@@ -24,6 +25,33 @@ const gameCategories = [
 export default function HomePage() {
   const [searchQuery, setSearchQuery] = useState("")
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [crawlUrl, setCrawlUrl] = useState('')
+  const router = useRouter();
+
+  const handleCrawl = async (e: React.FormEvent) => {
+    e.preventDefault()
+    try {
+      const response = await fetch('/api/crawl-guide', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ url: crawlUrl }),
+      })
+      const data = await response.json()
+      if (data.success) {
+        alert('Guide crawled and saved successfully!')
+        setCrawlUrl('')
+        // 跳转到新创建的攻略页面
+        router.push(`/guides/${data.id}`);
+      } else {
+        alert('Failed to crawl guide')
+      }
+    } catch (error) {
+      console.error('Error crawling guide:', error)
+      alert('Error crawling guide')
+    }
+  }
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
@@ -108,7 +136,7 @@ export default function HomePage() {
                       alt={guide.title}
                       width={500}
                       height={300}
-                      layout="responsive"
+                      style={{ objectFit: 'cover' }}
                     />
                   </div>
                   <h3 className="font-semibold mb-1 group-hover:text-purple-400 transition-colors">{guide.title}</h3>
@@ -140,6 +168,24 @@ export default function HomePage() {
             <h2 className="text-2xl font-semibold mb-4">加入我们的游戏社区</h2>
             <p className="text-gray-200 mb-8 max-w-2xl mx-auto">创建账户以保存您喜爱的攻略，参与讨论，并获得个性化推荐。</p>
             <Button className="rounded-full px-8 bg-white text-purple-600 hover:bg-gray-200 transition-colors">开始探索</Button>
+          </div>
+        </section>
+
+        {/* 爬取新攻略 */}
+        <section className="py-16">
+          <div className="container mx-auto px-4">
+            <h2 className="text-2xl font-semibold mb-8 text-purple-400">爬取新攻略</h2>
+            <form onSubmit={handleCrawl} className="max-w-md mx-auto">
+              <Input
+                type="url"
+                placeholder="输入攻略URL"
+                value={crawlUrl}
+                onChange={(e) => setCrawlUrl(e.target.value)}
+                className="mb-4"
+                required
+              />
+              <Button type="submit" className="w-full">爬取攻略</Button>
+            </form>
           </div>
         </section>
       </main>
