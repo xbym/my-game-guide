@@ -17,33 +17,34 @@ declare global {
   var mongooseConnection: CachedConnection | undefined;
 }
 
-let cached: CachedConnection = global.mongooseConnection || { conn: null, promise: null };
+let cached = global as any;
 
-if (!global.mongooseConnection) {
-  global.mongooseConnection = cached;
+if (!cached.mongoose) {
+  cached.mongoose = { conn: null, promise: null };
 }
 
 async function dbConnect(): Promise<typeof mongoose> {
-  if (cached.conn) {
-    return cached.conn;
+  if (cached.mongoose.conn) {
+    return cached.mongoose.conn;
   }
 
-  if (!cached.promise) {
+  if (!cached.mongoose.promise) {
     const opts = {
       bufferCommands: false,
     };
 
-    cached.promise = mongoose.connect(MONGODB_URI, opts);
+    cached.mongoose.promise = mongoose.connect(MONGODB_URI!, opts).then((mongooseInstance) => {
+      return mongooseInstance;
+    });
   }
 
   try {
-    cached.conn = await cached.promise;
-  } catch (e) {
-    cached.promise = null;
-    throw e;
+    const mongooseInstance = await cached.mongoose.promise;
+    return mongooseInstance;
+  } catch (error) {
+    console.error('Failed to connect to MongoDB:', error);
+    throw error;
   }
-
-  return cached.conn;
 }
 
 export default dbConnect;
