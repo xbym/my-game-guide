@@ -11,9 +11,9 @@
 - `.env.local`：环境变量配置文件，包含 MongoDB 连接字符串等敏感信息。
 - `.eslintrc.json`：ESLint 配置文件，用于代码质量和风格检查。
 - `.gitignore`：Git 忽略文件，指定哪些文件和文件夹不应提交到版本控制。
-- `next.config.mjs`：Next.js 配置文件。
+- `next.config.js`：Next.js 配置文件。
 - `postcss.config.mjs`：PostCSS 配置文件，用于处理 CSS。
-- `tailwind.config.ts`：Tailwind CSS 配置文件。
+- `tailwind.config.js`：Tailwind CSS 配置文件。
 
 ## `app/` 文件夹
 
@@ -30,6 +30,24 @@
 ## `lib/` 文件夹
 
 - `mongodb.ts`：MongoDB 数据库连接文件。
+- `dbConnect.ts`：数据库连接辅助函数。
+- `crawler.ts`：网页爬虫功能实现。
+- `utils.ts`：通用工具函数。
+
+## `models/` 文件夹
+
+- `Category.ts`：分类模型。
+- `Comment.ts`：评论模型。
+- `Game.ts`：游戏模型。
+- `Guide.ts`：攻略模型。
+- `User.ts`：用户模型。
+
+## `pages/` 文件夹
+
+- `api/`：API 路由文件夹。
+  - `crawl-guide.ts`：爬取攻略的 API 路由。
+  - `guides/index.ts`：攻略列表的 API 路由。
+- `guides/[id].tsx`：攻略详情页面。
 
 ## `public/` 文件夹
 
@@ -42,19 +60,14 @@
 - `Command_Guide.md`：命令指南，记录了项目开发过程中常用的命令。
 - `Project_Structure.md`：项目文件结构指南（本文件）。
 
-## 待开发的文件和文件夹
+## `.vscode/` 文件夹
 
-根据 MVP 开发指南，以下是未来可能需要创建的文件和文件夹：
+- `settings.json`：VS Code 编辑器设置文件。
 
-- `pages/`：用于存放其他页面组件，如攻略详情页、用户个人资料页等。
-- `models/`：用于存放数据库模型文件。
-- `utils/`：用于存放工具函数和辅助方法。
-- `hooks/`：用于存放自定义 React hooks。
-- `contexts/`：用于存放 React 上下文文件，如用户认证上下文。
-- `styles/`：用于存放其他样式文件，如主题配置等。
-- `tests/`：用于存放测试文件。
-- `locales/`：用于存放多语言翻译文件。
+## `types/` 文件夹
+
+- `global.d.ts`：全局类型声明文件。
 
 ## 结语
 
-这个项目结构反映了当前的开发进度，并为未来的扩展预留了空间。随着项目的发展，我们可能会添加新的文件和文件夹，或者调整现有的结构以适应新的需求。请定期查看此文档以获取最新的项目结构信息。
+这个项目结构反映了当前的开发进度。随着项目的发展，我们可能会添加新的文件和文件夹，或者调整现有的结构以适应新的需求。请定期查看此文档以获取最新的项目结构信息。
